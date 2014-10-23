@@ -45,3 +45,24 @@ ile_zlozen' x i
 
 ile_zlozen [] = 0
 ile_zlozen x = ile_zlozen' x 1
+
+was_visited _ [] = False
+was_visited i (x:xs) = (i == x) && (was_visited i xs)
+
+search _ [] = (0, 0)
+search from (x:xs)
+    | from == fst x = x
+    | otherwise = search from xs
+
+is_cycle' _ [] _ = True
+is_cycle' i pairs visited
+    | was_visited from visited = True
+    | otherwise = (is_cycle' new_from pairs ([ from ] ++ visited))
+    where
+        from = fst i
+        _to = snd i
+        new_from = search _to pairs
+
+is_cycle pair perm = is_cycle' pair perm []
+
+to_cycle pairs = [ x | x <- pairs, is_cycle x pairs ]
